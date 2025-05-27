@@ -20,6 +20,5 @@ class CanvasScraper(PortalScraper):
                 "title": assignment.get("name"),
                 "description": assignment.get("description", ""),
                 "due_date": assignment.get("due_at"),
-                "source": "Canvas"
             })
         return assignments
