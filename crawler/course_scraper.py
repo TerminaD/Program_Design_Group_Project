@@ -1,4 +1,4 @@
-import requests
+-import requests
 from bs4 import BeautifulSoup
 from .portal_scraper import PortalScraper
 
@@ -33,7 +33,6 @@ class CoursePKUScraper(PortalScraper):
             assignments.append({
                 "title": title,
                 "description": description,
-                "due_date": due,
-                "source": "PKU Course"
+                "due_date": due
             })
         return assignments
