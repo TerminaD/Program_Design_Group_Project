@@ -36,7 +36,6 @@ class OpenJudgeScraper(PortalScraper):
             assignments.append({
                 "title": title,
                 "description": "",
-                "due_date": due,
-                "source": "OpenJudge"
+                "due_date": due
             })
         return assignments
