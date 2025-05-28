@@ -1,7 +1,9 @@
 import sqlite3
 import tkinter as tk
 from data.database import DatabaseManager
-from crawler.portal_scraper import PortalScraper
+from crawler.canvas_scraper import CanvasScraper
+from crawler.course_scraper import CoursePKUScraper
+from crawler.openjudge_scraper import OpenJudgeScraper
 from backend.controller import Controller
 from gui.main_window import MainWindow
 
@@ -13,8 +15,10 @@ def main():
     db.initialize()
 
     # Initialize crawler and controller
-    crawler = PortalScraper()
-    controller = Controller(db, crawler)
+    canvas_scraper = CanvasScraper()
+    course_scraper = CoursePKUScraper()
+    openjudge_scraper = OpenJudgeScraper()
+    controller = Controller(db, canvas_scraper, course_scraper, openjudge_scraper)
 
     # Start GUI
     root = tk.Tk()

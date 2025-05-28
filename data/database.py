@@ -7,11 +7,18 @@ class DatabaseManager:
 
     def initialize(self):
         cursor = self.conn.cursor()
-        cursor.execute(
+        cursor.execute(  # Source: scraper, user
             """
             CREATE TABLE IF NOT EXISTS assignments (
                 id INTEGER PRIMARY KEY,
-                title TEXT,
+                subject TEXT,
+                content TEXT,
+                due_date TEXT,
+                source TEXT
+            )
+            CREATE TABLE IF NOT EXISTS exams (
+                id INTEGER PRIMARY KEY,
+                subject TEXT,
                 due_date TEXT
             )
         """
@@ -20,13 +27,41 @@ class DatabaseManager:
 
     def get_assignments(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT title, due_date FROM assignments ORDER BY due_date")
+        cursor.execute("SELECT subject, content, due_date FROM assignments")
         return cursor.fetchall()
 
-    def save_assignments(self, items):
+    def get_exams(self):
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM assignments")
-        cursor.executemany(
-            "INSERT INTO assignments (title, due_date) VALUES (?, ?)", items
+        cursor.execute("SELECT subject, due_date FROM exams")
+        return cursor.fetchall()
+
+    def add_assignment(self, subject: str, content: str, due_date: str, source: str):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "INSERT INTO assignments (subject, content, due_date, source) VALUES (?, ?, ?, ?)",
+            (subject, content, due_date, source),
         )
+        self.conn.commit()
+
+    def add_exam(self, subject: str, due_date: str):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "INSERT INTO exams (subject, due_date) VALUES (?, ?)",
+            (subject, due_date),
+        )
+        self.conn.commit()
+
+    def delete_assignment(self, id: int):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM assignments WHERE id = ?", (id,))
+        self.conn.commit()
+
+    def delete_exam(self, id: int):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM exams WHERE id = ?", (id,))
+        self.conn.commit()
+
+    def delete_all_scraper_assignments(self):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM assignments WHERE source = 'scraper'")
         self.conn.commit()

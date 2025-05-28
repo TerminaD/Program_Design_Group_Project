@@ -1,14 +1,48 @@
+from data.database import DatabaseManager
+from crawler.canvas_scraper import CanvasScraper
+from crawler.course_scraper import CoursePKUScraper
+from crawler.openjudge_scraper import OpenJudgeScraper
+
+
 class Controller:
-    def __init__(self, db, crawler):
+    def __init__(
+        self,
+        db: DatabaseManager,
+        canvas_scraper: CanvasScraper,
+        course_scraper: CoursePKUScraper,
+        openjudge_scraper: OpenJudgeScraper,
+    ):
         self.db = db
-        self.crawler = crawler
+        self.canvas_scraper = canvas_scraper
+        self.course_scraper = course_scraper
+        self.openjudge_scraper = openjudge_scraper
 
     def load_assignments(self):
-        # Load from local database
         return self.db.get_assignments()
 
+    def load_exams(self):
+        return self.db.get_exams()
+
     def refresh_assignments(self):
-        # Fetch new data and save
-        items = self.crawler.fetch_assignments()
-        self.db.save_assignments(items)
+        canvas_items = self.canvas_scraper.fetch_assignments()
+        course_items = self.course_scraper.fetch_assignments()
+        openjudge_items = self.openjudge_scraper.fetch_assignments()
+        items = canvas_items + course_items + openjudge_items
+        self.db.delete_all_scraper_assignments()
+        for item in items:
+            self.db.add_assignment(
+                item["title"], item["description"], item["due_date"], "scraper"
+            )
         return items
+
+    def user_add_assignment(self, subject: str, content: str, due_date: str):
+        self.db.add_assignment(subject, content, due_date, "user")
+
+    def user_add_exam(self, subject: str, due_date: str):
+        self.db.add_exam(subject, due_date)
+
+    def delete_assignment(self, id: int):
+        self.db.delete_assignment(id)
+
+    def delete_exam(self, id: int):
+        self.db.delete_exam(id)
