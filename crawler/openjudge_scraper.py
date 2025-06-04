@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from .portal_scraper import PortalScraper
+from crawler.portal_scraper import PortalScraper
 
 class OpenJudgeScraper(PortalScraper):
     def __init__(self, username, password):
