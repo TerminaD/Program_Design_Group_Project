@@ -223,18 +223,21 @@ class HomeworkList(tk.Frame):
                 lbl.config(text="Deadline passed", fg="#aa0000")
         self.after(1000, self.update_countdowns)  # update every second
 
-homework_data = [
-    {"subject": "Math", "description": "Complete exercises 5 to 10 on page 123.", "deadline": datetime(2025, 5, 29, 23, 59, 59)},
-    {"subject": "Physics", "description": "Prepare lab report on thermodynamics.", "deadline": datetime(2025, 5, 28, 18, 0, 0)},
-    {"subject": "History", "description": "Write a 1000-word essay about World War II.", "deadline": datetime(2025, 6, 1, 12, 0, 0)},
-    {"subject": "English", "description": "Read chapters 4 and 5 and answer the questions.", "deadline": datetime(2025, 5, 30, 15, 30, 0)},
-]
+# homework_data = [
+#     {"subject": "Math", "description": "Complete exercises 5 to 10 on page 123.", "deadline": datetime(2025, 5, 29, 23, 59, 59)},
+#     {"subject": "Physics", "description": "Prepare lab report on thermodynamics.", "deadline": datetime(2025, 5, 28, 18, 0, 0)},
+#     {"subject": "History", "description": "Write a 1000-word essay about World War II.", "deadline": datetime(2025, 6, 1, 12, 0, 0)},
+#     {"subject": "English", "description": "Read chapters 4 and 5 and answer the questions.", "deadline": datetime(2025, 5, 30, 15, 30, 0)},
+# ]
 
-final_exam_data = [
-    {"subject": "数学", "exam_date": datetime(2025, 6, 15, 9, 0)},
-    {"subject": "英语", "exam_date": datetime(2025, 6, 18, 13, 30)},
-    {"subject": "物理", "exam_date": datetime(2025, 6, 20, 8, 0)},
-]
+# final_exam_data = [
+#     {"subject": "数学", "exam_date": datetime(2025, 6, 15, 9, 0)},
+#     {"subject": "英语", "exam_date": datetime(2025, 6, 18, 13, 30)},
+#     {"subject": "物理", "exam_date": datetime(2025, 6, 20, 8, 0)},
+# ]
+
+homework_data = 
+
 
 hw_list = HomeworkList(app1, homework_data)
 hw_list.place(x=225, y=350)

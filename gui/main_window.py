@@ -21,8 +21,8 @@ class MainWindow(ttk.Frame):
     def load_data(self):
         for row in self.tree.get_children():
             self.tree.delete(row)
-        for title, due in self.controller.load_assignments():
-            self.tree.insert("", "end", values=(title, due))
+        for subject, content, due_date in self.controller.load_assignments():
+            self.tree.insert("", "end", values=(subject, content, due_date))
 
     def on_refresh(self):
         items = self.controller.refresh_assignments()

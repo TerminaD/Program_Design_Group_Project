@@ -15,12 +15,16 @@ class DatabaseManager:
                 content TEXT,
                 due_date TEXT,
                 source TEXT
-            )
+            );
+            """
+        )
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS exams (
                 id INTEGER PRIMARY KEY,
                 subject TEXT,
                 due_date TEXT
-            )
+            );
         """
         )
         self.conn.commit()
