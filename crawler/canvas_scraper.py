@@ -1,5 +1,5 @@
 import requests
-from .portal_scraper import PortalScraper
+from crawler.portal_scraper import PortalScraper
 
 class CanvasScraper(PortalScraper):
     def __init__(self, token, base_url):
