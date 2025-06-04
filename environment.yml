@@ -22,4 +22,7 @@ dependencies:
   - xz=5.8.1=h9a6d368_1
   - xz-gpl-tools=5.8.1=h9a6d368_1
   - xz-tools=5.8.1=h39f12f2_1
+  - requests
+  - pip:
+      - beautifulsoup4
 prefix: /opt/homebrew/Caskroom/miniforge/base/envs/prog_design_proj
