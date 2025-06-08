@@ -4,6 +4,12 @@ import sqlite3
 class DatabaseManager:
     def __init__(self, conn: sqlite3.Connection):
         self.conn = conn
+        
+    def delete_all_tables(self):
+        cursor = self.conn.cursor()
+        cursor.execute("DROP TABLE IF EXISTS assignments")
+        cursor.execute("DROP TABLE IF EXISTS exams")
+        self.conn.commit()
 
     def initialize(self):
         cursor = self.conn.cursor()

@@ -51,18 +51,15 @@ class Controller:
 class DebugController(Controller):
     def __init__(self, db: DatabaseManager):
         super().__init__(db, None, None, None)
-
-    def refresh_assignments(self):
-        items = [
-            {"title": "Math", "description": "Complete exercises 5 to 10 on page 123.", "due_date": "2025-05-29"},
+        self.placeholders = [
+            {"title": "CONTROLLER", "description": "Complete exercises 5 to 10 on page 123.", "due_date": "2025-05-29"},
             {"title": "Physics", "description": "Prepare lab report on thermodynamics.", "due_date": "2025-05-28"},
             {"title": "History", "description": "Write a 1000-word essay about World War II.", "due_date": "2025-06-01"},
             {"title": "English", "description": "Read chapters 4 and 5 and answer the questions.", "due_date": "2025-05-30"},
         ]
-        
-        self.db.delete_all_scraper_assignments()
-        for item in items:
+        self.db.delete_all_tables()
+        self.db.initialize()
+        for item in self.placeholders:
             self.db.add_assignment(
                 item["title"], item["description"], item["due_date"], "scraper"
             )
-        return items

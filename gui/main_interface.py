@@ -21,7 +21,6 @@ def create_main_interface(app1, controller):
         padx=20,
         pady=30,
     )
-
     label.pack()
 
     block_width = 150
@@ -55,6 +54,7 @@ def create_main_interface(app1, controller):
         open_window=lambda: open_web_window("https://www.pku.edu.cn"),
         text="北京大学教学网",
     )
+    
     raw_homework_data = controller.load_assignments()
     homework_data = [
         {
@@ -64,6 +64,7 @@ def create_main_interface(app1, controller):
         }
         for item in raw_homework_data
     ]
+    
     raw_final_exam_data = controller.load_exams()
     final_exam_data = [
         {"subject": item[0], "exam_date": datetime.strptime(item[1], "%Y-%m-%d")}
@@ -102,7 +103,7 @@ def create_main_interface(app1, controller):
 
     tk.Label(
         input_frame,
-        text="截止时间 (YYYY-MM-DD HH:MM):",
+        text="截止时间 (YYYY-MM-DD):",
         font=hw_list.cell_font,
         bg="#e3ebfc",
         fg="black",
@@ -115,7 +116,7 @@ def create_main_interface(app1, controller):
     add_btn = tk.Button(
         input_frame,
         text="添加作业",
-        command=add_homework,
+        command=lambda: add_homework(subject_entry, desc_entry, deadline_entry, app1, controller, hw_list),
         font=hw_list.cell_font,
         bg="#4a7abc",
         fg="green",
