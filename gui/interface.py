@@ -127,37 +127,6 @@ def create_rounded_block(parent, x, y, w=300, h=150, r=20, color="gray", image_p
     return canvas
 
 
-app1 = tk.Tk()
-
-app1.geometry("1920x1080")
-app1.title("Group Project")
-app1["bg"] = "white"
-
-label = tk.Label(
-    app1,
-    text="选择教学平台", 
-    font=("Helvetica", 38, "bold"),  
-    fg="black",                      
-    bg="white",                  
-    padx=20,                         
-    pady=30,                     
-)
-
-label.pack()
-
-block_width = 150
-spacing = (1920 - 3 * block_width) // 6.5
-x_positions = [
-    spacing,
-    spacing * 2 + block_width,
-    spacing * 3 + block_width * 2
-]
-
-
-create_rounded_block(app1, x=x_positions[0], y=150, color="#e3ebfc", image_path="pku.svg.png", open_window=lambda: open_web_window("https://www.pku.edu.cn"), text="PKU Canvas")
-create_rounded_block(app1, x=x_positions[1], y=150, color="#e3ebfc", image_path="poj.png", open_window=lambda: open_web_window("https://www.pku.edu.cn"), text="OpenJudge")
-create_rounded_block(app1, x=x_positions[2], y=150, color="#e3ebfc", image_path="jxw.png", open_window=lambda: open_web_window("https://www.pku.edu.cn"), text="北京大学教学网")
-
 class HomeworkList(tk.Frame):
     def __init__(self, parent, data, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -236,43 +205,14 @@ class HomeworkList(tk.Frame):
 #     {"subject": "物理", "exam_date": datetime(2025, 6, 20, 8, 0)},
 # ]
 
-homework_data = 
-
-
-hw_list = HomeworkList(app1, homework_data)
-hw_list.place(x=225, y=350)
-
-
-
-def get_final_exam_y():
+def get_final_exam_y(homework_data):
     return 350 + len(homework_data) * 45 + 60
 
-hw_list.update_idletasks() 
-hw_list_width = hw_list.winfo_width()
-hw_list_x = 225 
-
-# --- Input section to add new homework ---
-input_frame = tk.Frame(app1, bg="#e3ebfc", highlightbackground="#4a7abc", highlightthickness=2)
-gap = 20
-input_frame.place(x=hw_list_x + hw_list_width + gap, y=350)
-# Labels and entries
-tk.Label(input_frame, text="科目:", font=hw_list.cell_font, bg="#e3ebfc", fg="black").grid(row=0, column=0, sticky="w", padx=8, pady=4)
-subject_entry = tk.Entry(input_frame, font=hw_list.cell_font, width=30, bg="white", fg="black")
-subject_entry.grid(row=1, column=0, padx=8, pady=4)
-
-tk.Label(input_frame, text="描述:", font=hw_list.cell_font, bg="#e3ebfc", fg="black").grid(row=2, column=0, sticky="w", padx=8, pady=4)
-desc_entry = tk.Entry(input_frame, font=hw_list.cell_font, width=30, bg="white", fg="black")
-desc_entry.grid(row=3, column=0, padx=8, pady=4)
-
-tk.Label(input_frame, text="截止时间 (YYYY-MM-DD HH:MM):", font=hw_list.cell_font, bg="#e3ebfc", fg="black").grid(row=4, column=0, sticky="w", padx=8, pady=4)
-deadline_entry = tk.Entry(input_frame, font=hw_list.cell_font, width=30, bg="white", fg="black")
-deadline_entry.grid(row=5, column=0, padx=8, pady=4)
-
-def get_homework_list_height():
+def get_homework_list_height(homework_data):
     return 350 + len(homework_data) * 45
 
 
-def add_homework():
+def add_homework(subject_entry, desc_entry, deadline_entry, homework_data, app1):
     global hw_list
     subject = subject_entry.get().strip()
     desc = desc_entry.get().strip()
@@ -300,12 +240,3 @@ def add_homework():
         subject_entry.delete(0, tk.END)
         desc_entry.delete(0, tk.END)
         deadline_entry.delete(0, tk.END)
-
-add_btn = tk.Button(input_frame, text="添加作业", command=add_homework, font=hw_list.cell_font, bg="#4a7abc", fg="green", relief="flat", padx=10, pady=4)
-add_btn.grid(row=6, column=0, pady=8)
-
-final_exam_list = FinalExamList(app1, final_exam_data)
-final_exam_list.place(x=225, y=get_final_exam_y() )
-
-
-app1.mainloop()
