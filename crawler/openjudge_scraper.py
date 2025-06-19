@@ -3,39 +3,43 @@ from bs4 import BeautifulSoup
 from crawler.portal_scraper import PortalScraper
 
 class OpenJudgeScraper(PortalScraper):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def __init__(self):
         self.session = requests.Session()
 
-    def login(self):
-        login_url = "http://openjudge.cn/account/login/"
-        payload = {
-            "username": self.username,
-            "password": self.password
-        }
-
-        response = self.session.post(login_url, data=payload)
-        if response.status_code != 200:
-            raise Exception("OpenJudge 登录请求失败")
-
-        # 判断是否登录成功（比如检查是否跳转到用户主页，或者页面中包含“退出”链接）
-        if "logout" not in response.text.lower():
-            raise Exception("OpenJudge 登录失败，请检查用户名密码")
-
     def fetch_assignments(self):
-        self.login()
-        url = "http://openjudge.cn/homework"
+        url = "http://cxsjsx.openjudge.cn/"
         response = self.session.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         assignments = []
-
-        for row in soup.select(".homework-row"):
-            title = row.select_one(".title").text.strip()
-            due = row.select_one(".due-date").text.strip()
-            assignments.append({
-                "title": title,
-                "description": "",
-                "due_date": due
-            })
+        titles = soup.find_all("li", attrs={"class": "contest-info"})
+        if len(titles)>0:
+            title = []
+            for s in titles:
+                all_title= s.find_all('h3')
+                due = s.find_all('span', class_='over-time')
+            for s in all_title:
+                title.append(s.get_text(strip=True))
+            for i in range(len(due)):
+                assignments.append([
+                    "程序设计实习",
+                    title[i][1:],
+                    due[i].string[5:15]
+                ])
+        url_1 = "http://dsalgo.openjudge.cn/"
+        response_1 = self.session.get(url_1)
+        soup_1 = BeautifulSoup(response_1.text, 'html.parser')
+        titles_1 = soup_1.find_all("li", attrs={"class": "contest-info"})
+        if len(titles_1)>0:
+            title_1 = []
+            for s in titles_1:
+                all_title_1 = s.find_all('h3')
+                due_1 = s.find_all('span', class_='over-time')
+            for s in all_title_1:
+                title_1.append(s.get_text(strip=True))
+            for i in range(len(due_1)):
+                assignments.append([
+                   "数据结构分析",
+                    title_1[i][1:],
+                    due_1[i].string[5:15]
+                ])
         return assignments
