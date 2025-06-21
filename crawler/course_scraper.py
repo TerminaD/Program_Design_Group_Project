@@ -85,5 +85,3 @@ class CoursePKUScraper(PortalScraper):
                 assignments.append((course_name[38:], title, due))
         print(assignments)
         return assignments
-o = CoursePKUScraper()
-print(o.fetch_assignments())
