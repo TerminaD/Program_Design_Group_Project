@@ -13,7 +13,7 @@ class Controller:
         openjudge_scraper: OpenJudgeScraper,
     ):
         self.db = db
-        self.canvas_scraper = canvas_scraper()
+        self.canvas_scraper = canvas_scraper
         self.course_scraper = course_scraper
         self.openjudge_scraper = openjudge_scraper
         self.refresh_assignments()
