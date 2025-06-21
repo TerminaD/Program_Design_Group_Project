@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 class CanvasScraper:
     ENV_FILE = ".env"
-    BASE_URL_DEFAULT = "https://canvas.pku.edu.cn"
+    BASE_URL_DEFAULT = "https://Pku.instructure.com"
 
     def __init__(self):
         self.token = None
