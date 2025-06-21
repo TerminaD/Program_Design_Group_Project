@@ -79,7 +79,7 @@ class CanvasScraper:
 
     token = os.getenv("CANVAS_API_TOKEN")
 
-    scraper = CanvasScraper(token, base_url)
+    scraper = CanvasScraper()
     try:
         assignments = scraper.fetch_assignments()
         for a in assignments:
