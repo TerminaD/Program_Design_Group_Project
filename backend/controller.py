@@ -16,6 +16,7 @@ class Controller:
         self.canvas_scraper = canvas_scraper
         self.course_scraper = course_scraper
         self.openjudge_scraper = openjudge_scraper
+        self.refresh_assignments()
 
     def load_assignments(self):
         return self.db.get_assignments()
