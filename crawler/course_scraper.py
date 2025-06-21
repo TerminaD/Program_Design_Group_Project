@@ -4,24 +4,10 @@ from bs4 import BeautifulSoup
 import re
 from crawler.portal_scraper import PortalScraper
 import browser_cookie3
-import ctypes
-import sys
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
 
-def relaunch_as_admin():
-    params = " ".join([f'"{arg}"' for arg in sys.argv])
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, params, None, 1)
-    sys.exit()
 
 class CoursePKUScraper(PortalScraper):
     def fetch_assignments(self):
-
-        if not is_admin():
-            relaunch_as_admin()
 
         base_url = "https://course.pku.edu.cn"
         home_url = urljoin(base_url, "/webapps/portal/execute/tabs/tabAction?tab_tab_group_id=_1_1")
