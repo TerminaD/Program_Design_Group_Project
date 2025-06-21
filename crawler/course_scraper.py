@@ -5,18 +5,34 @@ import re
 from crawler.portal_scraper import PortalScraper
 import browser_cookie3
 
-
 class CoursePKUScraper(PortalScraper):
-    def fetch_assignments(self):
+    def get_any_browser_cookies(self, domain):
+        browsers = [
+            ('chrome', browser_cookie3.chrome),
+            ('firefox', browser_cookie3.firefox),
+            ('edge', browser_cookie3.edge),
+            ('opera', browser_cookie3.opera),
+        ]
+        for name, func in browsers:
+            try:
+                cj = func(domain_name=domain)
+                if cj:
+                    print(f"成功读取到来自 {name} 浏览器的 cookie。")
+                    return cj
+            except Exception as e:
+                print(f"无法读取 {name} 浏览器的 cookie：{e}")
+        raise RuntimeError(f"所有浏览器的 cookie 读取均失败，请确保至少一个浏览器登录了 {domain}。")
 
+    def fetch_assignments(self):
         base_url = "https://course.pku.edu.cn"
         home_url = urljoin(base_url, "/webapps/portal/execute/tabs/tabAction?tab_tab_group_id=_1_1")
 
         try:
-            cj = browser_cookie3.chrome(domain_name='course.pku.edu.cn')
+            cj = self.get_any_browser_cookies(domain='course.pku.edu.cn')
         except Exception as e:
-            print("无法读取浏览器 cookie，请确保已登录 course.pku.edu.cn 并勾选“记住我”。")
+            print("无法读取任何浏览器的 cookie，请确保已登录 course.pku.edu.cn 并勾选“记住我”。")
             raise e
+
         cookies_dict = {cookie.name: cookie.value for cookie in cj}
 
         session = requests.Session()
