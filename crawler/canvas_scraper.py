@@ -1,42 +1,80 @@
 import os
 import requests
 from dotenv import load_dotenv
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
 class CanvasScraper:
     ENV_FILE = ".env"
     BASE_URL_DEFAULT = "https://Pku.instructure.com"
 
-    def __init__(self):
+    def __init__(self, root_for_dialog=None):
         self.token = None
         self.base_url = None
-        self._load_or_create_env()
+        self.root_for_dialog = root_for_dialog
+        self._load_or_prompt_for_token()
 
-    def _create_env_file(self):
-        print("检测到当前目录无 .env 文件，开始创建...")
-        token = input("请输入你的 Canvas API Token（访问令牌）：").strip()
-        if not token:
-            print("Token 不能为空，请重新运行程序。")
-            exit(1)
+    def _prompt_for_token(self):
+        if self.root_for_dialog:
+            self.root_for_dialog.withdraw()  # Hide main window
+            token = simpledialog.askstring(
+                "Canvas API Token",
+                "未检测到 .env 文件或文件中缺少Token。\n请输入你的 Canvas API Token（访问令牌）：",
+                parent=self.root_for_dialog,
+            )
+            if token:
+                self._save_env_file(token)
+                messagebox.showinfo(
+                    "成功", ".env 文件已创建并保存了你的 Token。", parent=self.root_for_dialog
+                )
+                self.root_for_dialog.deiconify() # Show main window again
+                return True
+            else:
+                messagebox.showerror(
+                    "错误", "Token 不能为空，程序将退出。", parent=self.root_for_dialog
+                )
+                self.root_for_dialog.quit()
+                return False
+        else: # Fallback to command line
+            print("检测到当前目录无 .env 文件或缺少Token，开始命令行输入...")
+            token = input("请输入你的 Canvas API Token（访问令牌）：").strip()
+            if not token:
+                print("Token 不能为空，请重新运行程序。")
+                exit(1)
+            self._save_env_file(token)
+            print(".env 文件已创建并保存了你的 Token。")
+            return True
 
+    def _save_env_file(self, token):
         with open(self.ENV_FILE, "w", encoding="utf-8") as f:
             f.write(f"CANVAS_BASE_URL={self.BASE_URL_DEFAULT}\n")
             f.write(f"CANVAS_API_TOKEN={token}\n")
 
-        print(".env 文件已创建并保存了你的 Token。")
-
-    def _load_or_create_env(self):
+    def _load_or_prompt_for_token(self):
         if not os.path.exists(self.ENV_FILE):
-            self._create_env_file()
+            if not self._prompt_for_token():
+                return
 
         load_dotenv(self.ENV_FILE)
         self.token = os.getenv("CANVAS_API_TOKEN")
         self.base_url = os.getenv("CANVAS_BASE_URL") or self.BASE_URL_DEFAULT
 
         if not self.token:
-            print("❌ .env 文件中没有找到 CANVAS_API_TOKEN，请检查。")
-            exit(1)
+            if not self._prompt_for_token():
+                return
+            # Reload after prompt
+            load_dotenv(self.ENV_FILE)
+            self.token = os.getenv("CANVAS_API_TOKEN")
+            self.base_url = os.getenv("CANVAS_BASE_URL") or self.BASE_URL_DEFAULT
 
     def fetch_assignments(self):
+        if not self.token:
+            if self.root_for_dialog:
+                messagebox.showerror("错误", "无法获取Canvas token，请重启应用。")
+            else:
+                print("❌ 未能获取Cavas token.")
+            return []
+
         headers = {"Authorization": f"Bearer {self.token}"}
         assignments = []
 
@@ -72,7 +110,7 @@ class CanvasScraper:
                 })
 
         return assignments
-'''
+
 if __name__ == "__main__":
     import os
     from dotenv import load_dotenv
@@ -84,7 +122,6 @@ if __name__ == "__main__":
     try:
         assignments = scraper.fetch_assignments()
         for a in assignments:
-            print(f"{a['course']} | {a['title']} | {a['due_date']}")
+            print(f"{a['title']} | {a['description']} | {a['due_date']}")
     except Exception as e:
             print("错误:", e)
-'''
