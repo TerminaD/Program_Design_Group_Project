@@ -1,5 +1,3 @@
-import sqlite3
-import tkinter as tk
 import ctypes
 import sys
 
@@ -16,7 +14,9 @@ import sys
 
     if not is_admin():
         relaunch_as_admin()
-        
+import sqlite3
+import tkinter as tk
+
 from data.database import DatabaseManager
 from crawler.canvas_scraper import CanvasScraper
 from crawler.course_scraper import CoursePKUScraper
