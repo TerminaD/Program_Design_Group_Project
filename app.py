@@ -3,15 +3,6 @@ import tkinter as tk
 import ctypes
 import sys
 
-from data.database import DatabaseManager
-from crawler.canvas_scraper import CanvasScraper
-from crawler.course_scraper import CoursePKUScraper
-from crawler.openjudge_scraper import OpenJudgeScraper
-from backend.controller import Controller, DebugController
-from gui.main_interface import create_main_interface
-
-
-def main():
     def is_admin():
         try:
             return ctypes.windll.shell32.IsUserAnAdmin()
@@ -25,6 +16,16 @@ def main():
 
     if not is_admin():
         relaunch_as_admin()
+        
+from data.database import DatabaseManager
+from crawler.canvas_scraper import CanvasScraper
+from crawler.course_scraper import CoursePKUScraper
+from crawler.openjudge_scraper import OpenJudgeScraper
+from backend.controller import Controller, DebugController
+from gui.main_interface import create_main_interface
+
+
+def main():
     # 在 debug 模式下，不进行爬虫，使用一个占位数据库
     is_debug = False
 
