@@ -1,18 +1,21 @@
 import ctypes
 import sys
-    def is_admin():
-        try:
-            return ctypes.windll.shell32.IsUserAnAdmin()
-        except:
-            return False
 
-    def relaunch_as_admin():
-        params = " ".join([f'"{arg}"' for arg in sys.argv])
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, params, None, 1)
-        sys.exit()
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
-    if not is_admin():
-        relaunch_as_admin()
+def relaunch_as_admin():
+    params = " ".join([f'"{arg}"' for arg in sys.argv])
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, params, None, 1)
+    sys.exit()
+
+if not is_admin():
+    relaunch_as_admin()
+
+
 import sqlite3
 import tkinter as tk
 
