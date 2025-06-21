@@ -20,11 +20,11 @@ class OpenJudgeScraper(PortalScraper):
             for s in all_title:
                 title.append(s.get_text(strip=True))
             for i in range(len(due)):
-                assignments.append([
-                    "程序设计实习",
-                    title[i][1:],
-                    due[i].string[5:15]
-                ])
+                assignments.append({
+                    "title":"程序设计实习",
+                    "description":title[i][1:],
+                    "due_date":due[i].string[5:15]
+                })
         url_1 = "http://dsalgo.openjudge.cn/"
         response_1 = self.session.get(url_1)
         soup_1 = BeautifulSoup(response_1.text, 'html.parser')
@@ -37,9 +37,9 @@ class OpenJudgeScraper(PortalScraper):
             for s in all_title_1:
                 title_1.append(s.get_text(strip=True))
             for i in range(len(due_1)):
-                assignments.append([
-                   "数据结构分析",
-                    title_1[i][1:],
-                    due_1[i].string[5:15]
-                ])
+                assignments.append({
+                    "title":"数据结构分析",
+                    "description":title[i][1:],
+                    "due_date":due[i].string[5:15]
+                })
         return assignments
