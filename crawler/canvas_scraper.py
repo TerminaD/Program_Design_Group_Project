@@ -43,7 +43,7 @@ class CanvasScraper:
         # 获取当前用户所有活跃课程
         courses_url = f"{self.base_url.rstrip('/')}/api/v1/courses"
         params = {"enrollment_state": "active", "per_page": 100}
-        response = requests.get(courses_url, headers=headers, params=params)
+        response = requests.get(courses_url, headers=headers, params=params,verify = False)
         if response.status_code != 200:
             raise Exception(f"获取课程失败，状态码: {response.status_code}")
 
@@ -72,19 +72,19 @@ class CanvasScraper:
                 })
 
         return assignments
-'''if __name__ == "__main__":
+'''
+if __name__ == "__main__":
     import os
     from dotenv import load_dotenv
     load_dotenv()
-
+    
     token = os.getenv("CANVAS_API_TOKEN")
-
+    
     scraper = CanvasScraper()
     try:
         assignments = scraper.fetch_assignments()
         for a in assignments:
             print(f"{a['course']} | {a['title']} | {a['due_date']}")
     except Exception as e:
-        print("错误:", e)
-    需要获得API
+            print("错误:", e)
 '''
