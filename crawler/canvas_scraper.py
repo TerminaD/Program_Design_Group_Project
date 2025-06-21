@@ -33,7 +33,7 @@ class CanvasScraper:
         self.base_url = os.getenv("CANVAS_BASE_URL") or self.BASE_URL_DEFAULT
 
         if not self.token:
-            print(".env 文件中没有找到 CANVAS_API_TOKEN，请检查。")
+            print("❌ .env 文件中没有找到 CANVAS_API_TOKEN，请检查。")
             exit(1)
 
     def fetch_assignments(self):
@@ -66,8 +66,8 @@ class CanvasScraper:
                 due_at = a.get("due_at") or ""
                 due_str = due_at[:10] if due_at else "无"
                 assignments.append({
-                    "course": course_name,
-                    "title": title,
+                    "title": course_name,
+                    "description": title,
                     "due_date": due_str,
                 })
 
