@@ -27,4 +27,5 @@ dependencies:
       - beautifulsoup4
       - python-dotenv
       - browser-cookie3
+      - webbrowser
 prefix: /opt/homebrew/Caskroom/miniforge/base/envs/prog_design_proj
