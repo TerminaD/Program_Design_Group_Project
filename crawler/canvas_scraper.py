@@ -108,7 +108,7 @@ class CanvasScraper:
                     "description": title,
                     "due_date": due_str,
                 })
-
+        print("Canvas 爬取作业完成")
         return assignments
 
 if __name__ == "__main__":

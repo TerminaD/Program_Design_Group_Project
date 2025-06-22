@@ -22,10 +22,27 @@ dependencies:
   - xz=5.8.1=h9a6d368_1
   - xz-gpl-tools=5.8.1=h9a6d368_1
   - xz-tools=5.8.1=h39f12f2_1
-  - requests
   - pip:
-      - beautifulsoup4
-      - python-dotenv
-      - browser-cookie3
-      - webbrowser
-prefix: /opt/homebrew/Caskroom/miniforge/base/envs/prog_design_proj
+      - beautifulsoup4==4.13.4
+      - bottle==0.13.3
+      - browser-cookie3==0.20.1
+      - bs4==0.0.2
+      - certifi==2025.4.26
+      - charset-normalizer==3.4.2
+      - dotenv==0.9.9
+      - idna==3.10
+      - lz4==4.4.4
+      - pillow==11.2.1
+      - proxy-tools==0.1.0
+      - pycryptodomex==3.23.0
+      - pyobjc-core==11.0
+      - pyobjc-framework-cocoa==11.0
+      - pyobjc-framework-quartz==11.0
+      - pyobjc-framework-security==11.0
+      - pyobjc-framework-webkit==11.0
+      - python-dotenv==1.1.0
+      - pywebview==5.4
+      - requests==2.32.3
+      - soupsieve==2.7
+      - typing-extensions==4.14.0
+      - urllib3==2.4.0

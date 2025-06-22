@@ -42,4 +42,5 @@ class OpenJudgeScraper(PortalScraper):
                     "description":title[i][1:],
                     "due_date":due[i].string[5:15]
                 })
+        print("OpenJudge 爬取作业完成")
         return assignments

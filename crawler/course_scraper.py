@@ -100,4 +100,5 @@ class CoursePKUScraper(PortalScraper):
                     due = f"{year}-00-00"
                 assignments.append((course_name[38:], title, due))
         print(assignments)
+        print("Course 爬取作业完成")
         return assignments
