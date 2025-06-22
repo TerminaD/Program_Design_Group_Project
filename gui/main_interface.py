@@ -12,8 +12,32 @@ from .interface import (
 
 
 def create_main_interface(app1, controller):
+    # --- Scrollable Canvas Setup ---
+    canvas = tk.Canvas(app1, bg="white", highlightthickness=0)
+    scrollbar = tk.Scrollbar(app1, orient="vertical", command=canvas.yview)
+    scrollable_frame = tk.Frame(canvas, bg="white")
+
+    scrollable_frame.bind(
+        "<Configure>",
+        lambda e: canvas.configure(
+            scrollregion=canvas.bbox("all")
+        )
+    )
+
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
+
+    # Enable mousewheel scrolling
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+    # --- All content below goes into scrollable_frame instead of app1 ---
     label = tk.Label(
-        app1,
+        scrollable_frame,
         text="选择教学平台",
         font=("Helvetica", 38, "bold"),
         fg="black",
@@ -23,38 +47,41 @@ def create_main_interface(app1, controller):
     )
     label.pack()
 
+    # --- Platform blocks in a horizontal frame ---
+    block_frame = tk.Frame(scrollable_frame, bg="white")
+    block_frame.pack(pady=10)
     block_width = 150
-    spacing = (1920 - 3 * block_width) // 6.5
-    x_positions = [spacing, spacing * 2 + block_width, spacing * 3 + block_width * 2]
-
+    spacing = 40  # Use a fixed spacing for pack layout
+    
     create_rounded_block(
-        app1,
-        x=x_positions[0],
-        y=150,
+        block_frame,
+        x=0, y=0,  # x/y ignored in pack layout
         color="#e3ebfc",
         image_path="assets/pku.png",
         open_window=lambda: open_web_window("https://www.pku.edu.cn"),
         text="PKU Canvas",
-    )
+    ).pack(side="left", padx=spacing)
     create_rounded_block(
-        app1,
-        x=x_positions[1],
-        y=150,
+        block_frame,
+        x=0, y=0,
         color="#e3ebfc",
         image_path="assets/poj.png",
         open_window=lambda: open_web_window("https://www.pku.edu.cn"),
         text="OpenJudge",
-    )
+    ).pack(side="left", padx=spacing)
     create_rounded_block(
-        app1,
-        x=x_positions[2],
-        y=150,
+        block_frame,
+        x=0, y=0,
         color="#e3ebfc",
         image_path="assets/jxw.png",
         open_window=lambda: open_web_window("https://www.pku.edu.cn"),
         text="北京大学教学网",
-    )
-    
+    ).pack(side="left", padx=spacing)
+
+    # --- Homework and input section in a horizontal frame ---
+    content_frame = tk.Frame(scrollable_frame, bg="white")
+    content_frame.pack(pady=30, fill="x", expand=True)
+
     raw_homework_data = controller.load_assignments()
     homework_data = [
         {
@@ -71,19 +98,15 @@ def create_main_interface(app1, controller):
         for item in raw_final_exam_data
     ]
 
-    hw_list = HomeworkList(app1, homework_data)
-    hw_list.place(x=225, y=350)
+    # Homework list
+    hw_list = HomeworkList(content_frame, homework_data)
+    hw_list.pack(side="left", padx=30, anchor="n")
 
-    hw_list.update_idletasks()
-    hw_list_width = hw_list.winfo_width()
-    hw_list_x = 225
-
-    # --- Input section to add new homework ---
+    # Input section
     input_frame = tk.Frame(
-        app1, bg="#e3ebfc", highlightbackground="#4a7abc", highlightthickness=2
+        content_frame, bg="#e3ebfc", highlightbackground="#4a7abc", highlightthickness=2
     )
-    gap = 20
-    input_frame.place(x=hw_list_x + hw_list_width + gap, y=350)
+    input_frame.pack(side="left", padx=30, anchor="n")
     # Labels and entries
     tk.Label(
         input_frame, text="科目:", font=hw_list.cell_font, bg="#e3ebfc", fg="black"
@@ -116,7 +139,7 @@ def create_main_interface(app1, controller):
     add_btn = tk.Button(
         input_frame,
         text="添加作业",
-        command=lambda: add_homework(subject_entry, desc_entry, deadline_entry, app1, controller, hw_list),
+        command=lambda: add_homework(subject_entry, desc_entry, deadline_entry, scrollable_frame, controller, hw_list),
         font=hw_list.cell_font,
         bg="#4a7abc",
         fg="green",
@@ -126,5 +149,6 @@ def create_main_interface(app1, controller):
     )
     add_btn.grid(row=6, column=0, pady=8)
 
-    final_exam_list = FinalExamList(app1, final_exam_data)
-    final_exam_list.place(x=225, y=get_final_exam_y(homework_data))
+    # --- Final exam list below ---
+    final_exam_list = FinalExamList(scrollable_frame, final_exam_data)
+    final_exam_list.pack(pady=30, anchor="w")

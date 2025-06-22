@@ -70,9 +70,9 @@ def open_web_window(url):
 def create_rounded_block(parent, x, y, w=300, h=150, r=20, color="gray", image_path=None,
                          open_window=None, text=None, text_color="black", font=("Helvetica", 25)):
     canvas = tk.Canvas(parent, width=w, height=h, bg="white", highlightthickness=0)
-    canvas.place(x=x, y=y)
+    canvas.pack_propagate(False)
 
-    # Your original drawing code unchanged:
+    # Drawing code unchanged:
     canvas.create_arc((0, 0, 2*r, 2*r), start=90, extent=90, fill=color, outline=color)
     canvas.create_arc((w-2*r, 0, w, 2*r), start=0, extent=90, fill=color, outline=color)
     canvas.create_arc((0, h-2*r, 2*r, h), start=180, extent=90, fill=color, outline=color)
@@ -93,33 +93,11 @@ def create_rounded_block(parent, x, y, w=300, h=150, r=20, color="gray", image_p
     if open_window:
         canvas.bind("<Button-1>", lambda event: open_window())
 
-    # Animation variables:
-    animation_steps = 10
-    animation_delay = 20  # milliseconds
-    move_distance = 7
-
-    def animate_move(step=0, direction=1):
-        # direction=1 means move up, -1 means move down
-        if step <= animation_steps:
-            current_y = canvas.winfo_y()
-            dy = direction * (move_distance / animation_steps)
-            new_y = current_y - dy  # minus because moving up reduces y coordinate
-            canvas.place_configure(y=int(new_y))
-            canvas.after(animation_delay, animate_move, step + 1, direction)
-        else:
-            # Ensure final position is exact
-            if direction == 1:
-                canvas.place_configure(y=y - move_distance)
-            else:
-                canvas.place_configure(y=y)
-
     def on_enter(event):
         canvas.config(cursor="hand2")
-        animate_move(direction=1)
 
     def on_leave(event):
         canvas.config(cursor="")
-        animate_move(direction=-1)
 
     canvas.bind("<Enter>", on_enter)
     canvas.bind("<Leave>", on_leave)
