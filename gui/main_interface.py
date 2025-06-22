@@ -58,7 +58,7 @@ def create_main_interface(app1, controller):
         x=0, y=0,  # x/y ignored in pack layout
         color="#e3ebfc",
         image_path="assets/pku.png",
-        open_window=lambda: open_web_window("https://www.pku.edu.cn"),
+        open_window=lambda: open_web_window("https://Pku.instructure.com"),
         text="PKU Canvas",
     ).pack(side="left", padx=spacing)
     create_rounded_block(
@@ -66,7 +66,7 @@ def create_main_interface(app1, controller):
         x=0, y=0,
         color="#e3ebfc",
         image_path="assets/poj.png",
-        open_window=lambda: open_web_window("https://www.pku.edu.cn"),
+        open_window=lambda: open_web_window("http://cxsjsx.openjudge.cn"),
         text="OpenJudge",
     ).pack(side="left", padx=spacing)
     create_rounded_block(
@@ -74,7 +74,7 @@ def create_main_interface(app1, controller):
         x=0, y=0,
         color="#e3ebfc",
         image_path="assets/jxw.png",
-        open_window=lambda: open_web_window("https://www.pku.edu.cn"),
+        open_window=lambda: open_web_window("https://course.pku.edu.cn"),
         text="北京大学教学网",
     ).pack(side="left", padx=spacing)
 
