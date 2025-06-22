@@ -25,5 +25,5 @@ dependencies:
   - requests
   - pip:
       - beautifulsoup4
-      -python-dotenv
+      - python-dotenv
 prefix: /opt/homebrew/Caskroom/miniforge/base/envs/prog_design_proj
