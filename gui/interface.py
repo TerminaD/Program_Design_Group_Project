@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import webview
+import webbrowser
 from datetime import datetime, timedelta
 import tkinter.messagebox as messagebox
 
@@ -63,8 +64,7 @@ class FinalExamList(tk.Frame):
 
 
 def open_web_window(url):
-    webview.create_window("Website", url, width=800, height=600)
-    webview.start()
+    webbrowser.open(url)
 
 
 def create_rounded_block(parent, x, y, w=300, h=150, r=20, color="gray", image_path=None,
