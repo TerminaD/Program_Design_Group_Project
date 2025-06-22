@@ -169,7 +169,7 @@ class HomeworkList(tk.Frame):
             desc_lbl.grid(row=i, column=2, sticky="nsew")
 
             # Deadline column (two lines: date and countdown)
-            deadline_str = row['deadline'].strftime("%d %b %Y")
+            deadline_str = row['deadline'].strftime("%d %b %Y") if row['deadline'] else "无"
             deadline_lbl = tk.Label(self, text=deadline_str, font=self.deadline_font, borderwidth=0, relief="flat", padx=6, pady=2, fg="#a00", anchor="n", bg="#e3ebfc")
             deadline_lbl.grid(row=i, column=3, sticky="nsew")
 
@@ -181,7 +181,7 @@ class HomeworkList(tk.Frame):
     def update_countdowns(self):
         now = datetime.now()
         for lbl, deadline in self.countdown_labels:
-            diff = deadline - now
+            diff = deadline - now if deadline else timedelta(days=0)
             if diff.total_seconds() > 0:
                 days = diff.days
                 hours, remainder = divmod(diff.seconds, 3600)
@@ -218,7 +218,7 @@ def add_homework(subject_entry, desc_entry, deadline_entry, app1, controller, hw
             {
                 "subject": item[0],
                 "description": item[1],
-                "deadline": datetime.strptime(item[2], "%Y-%m-%d"),
+                "deadline": datetime.strptime(item[2], "%Y-%m-%d") if item[2] != "无" else None
             }
             for item in raw_homework_data
         ]

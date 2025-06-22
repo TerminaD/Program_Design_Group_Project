@@ -60,7 +60,7 @@ def create_main_interface(app1, controller):
         {
             "subject": item[0],
             "description": item[1],
-            "deadline": datetime.strptime(item[2], "%Y-%m-%d"),
+            "deadline": datetime.strptime(item[2], "%Y-%m-%d") if item[2] != "无" else None,
         }
         for item in raw_homework_data
     ]
