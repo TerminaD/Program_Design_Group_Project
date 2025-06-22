@@ -189,8 +189,8 @@ def add_homework(subject_entry, desc_entry, deadline_entry, app1, controller, hw
 
     if subject and desc and deadline:
         controller.user_add_assignment(subject, desc, deadline_str)
-        hw_list.destroy()  # Re-render the list
         
+        # Update the data in the existing HomeworkList
         raw_homework_data = controller.load_assignments()
         homework_data = [
             {
@@ -201,11 +201,14 @@ def add_homework(subject_entry, desc_entry, deadline_entry, app1, controller, hw
             for item in raw_homework_data
         ]
         
-        new_hw_list = HomeworkList(app1, homework_data)
-        new_hw_list.place(x=225, y=350)
+        hw_list.data = homework_data
+        for widget in hw_list.winfo_children():
+            widget.destroy()
+        hw_list.create_widgets()
+        hw_list.update_countdowns()
 
         subject_entry.delete(0, tk.END)
         desc_entry.delete(0, tk.END)    
         deadline_entry.delete(0, tk.END)
         
-        return new_hw_list
+        return hw_list
